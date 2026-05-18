@@ -30,7 +30,7 @@ const primaryLight = '#f3eff8';
 const finalBg = '#e9e2f4';
 const borderColor = '#e5e5e5';
 const appVersion = '2026-05-18-quote-title';
-const savedQuoteKey = 'blingkkami-quote-generator-state';
+const savedQuoteKey = 'blingkkami-quote-generator-state-v2';
 
 const defaultFormData: QuoteForm = {
   quoteDate: '2026-05-07',
@@ -43,8 +43,7 @@ const defaultFormData: QuoteForm = {
   finalDescription: '하짝 + 상짝 컬러변형 1종 + 신규 2종 + AI 파일 납품',
   notes:
     '기본안만 진행하실 경우 80,000원이며, 옵션은 필요한 항목만 선택 가능합니다.\n수정은 항목별 2회까지 포함됩니다. 그 이후 추가 수정이 필요하신 경우, 난이도에 따라 회당 20,000원부터 추가 비용이 발생할 수 있습니다.\n최종 납품 파일은 인쇄용 AI 파일로 제공됩니다.\n작업 착수 전 계약금 50% 선입금을 원칙으로 합니다. 입금 계좌 및 세금계산서(또는 현금영수증) 발행 관련 안내는 계약 확정 후 함께 전달드리겠습니다.\n본 견적서의 유효기간은 견적일로부터 14일입니다.',
-  message:
-    '이윤서 대표님 소개로 인연이 닿아 정말 반갑습니다.\n위 금액이 기준이지만, 혹시 내부 예산이 정해져 있으시면 편하게 말씀 주세요. 첫 거래인 만큼 최대한 맞춰 드리려고 합니다.\n앞으로도 패키지나 다른 디자인 작업 필요하실 때 언제든 편하게 연락 주세요. 좋은 파트너가 되겠습니다.',
+  message: '앞으로도 패키지나 다른 디자인 작업 필요하실 때 언제든 편하게 연락 주세요. 좋은 파트너가 되겠습니다.',
   signOffSender: '블링까미 스튜디오 드림',
   signOffDate: '2026년 5월 7일',
 };
