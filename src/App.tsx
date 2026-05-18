@@ -29,6 +29,7 @@ const primary = '#3b2f7d';
 const primaryLight = '#f3eff8';
 const finalBg = '#e9e2f4';
 const borderColor = '#e5e5e5';
+const appVersion = '2026-05-18-quote-title';
 
 const formatCurrency = (amount: number) => `${new Intl.NumberFormat('ko-KR').format(amount || 0)}원`;
 
@@ -265,6 +266,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <FileText className="h-6 w-6 text-[#3b2f7d]" />
             <h1 className="text-lg font-bold">견적서 생성기</h1>
+            <span className="sr-only">version {appVersion}</span>
           </div>
           <button
             type="button"
