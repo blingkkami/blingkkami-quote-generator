@@ -281,15 +281,25 @@ export default function App() {
             <h1 className="text-lg font-bold">견적서 생성기</h1>
             <span className="sr-only">version {appVersion}</span>
           </div>
-          <button
-            type="button"
-            onClick={downloadPdf}
-            disabled={isGenerating}
-            className="inline-flex items-center gap-2 rounded-md bg-[#3b2f7d] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#302666] disabled:bg-[#a67dbf]"
-          >
-            <Download className="h-4 w-4" />
-            {isGenerating ? 'PDF 생성 중' : 'PDF 다운로드'}
-          </button>
+          <div className="flex items-center gap-3">
+            <a
+              href="./quote-example.pdf"
+              download="견적서_BT_예시.pdf"
+              className="inline-flex items-center gap-2 rounded-md border border-[#3b2f7d] bg-white px-4 py-2 text-sm font-semibold text-[#3b2f7d] transition hover:bg-[#f3eff8]"
+            >
+              <Download className="h-4 w-4" />
+              예시 PDF
+            </a>
+            <button
+              type="button"
+              onClick={downloadPdf}
+              disabled={isGenerating}
+              className="inline-flex items-center gap-2 rounded-md bg-[#3b2f7d] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#302666] disabled:bg-[#a67dbf]"
+            >
+              <Download className="h-4 w-4" />
+              {isGenerating ? 'PDF 생성 중' : 'PDF 다운로드'}
+            </button>
+          </div>
         </div>
       </header>
 
