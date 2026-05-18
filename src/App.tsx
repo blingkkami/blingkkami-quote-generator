@@ -116,7 +116,7 @@ export default function App() {
     issuerName: '블링까미 스튜디오',
     projectName: 'BT THERA 에코패키지 디자인',
     deliveryFormat: 'AI 파일 (인쇄용)',
-    deliverySchedule: '2026-05-20',
+    deliverySchedule: '착수 후 10영업일 (5월 20일)',
     finalCategory: '최종 풀구성',
     finalDescription: '하짝 + 상짝 컬러변형 1종 + 신규 2종 + AI 파일 납품',
     notes:
@@ -315,9 +315,8 @@ export default function App() {
               <TextInput label="프로젝트명" name="projectName" value={formData.projectName} onChange={updateForm} />
               <TextInput label="납품 형식" name="deliveryFormat" value={formData.deliveryFormat} onChange={updateForm} />
               <TextInput
-                label="납기 예정일"
+                label="납기 예정"
                 name="deliverySchedule"
-                type="date"
                 value={formData.deliverySchedule}
                 onChange={updateForm}
               />
@@ -467,8 +466,8 @@ const QuotePreview = React.forwardRef<
           <InfoRow
             leftLabel="납품 형식"
             leftValue={formData.deliveryFormat}
-            rightLabel="납기 예정일"
-            rightValue={formatKoreanDate(formData.deliverySchedule)}
+            rightLabel="납기 예정"
+            rightValue={formData.deliverySchedule}
             isLast
           />
         </tbody>
