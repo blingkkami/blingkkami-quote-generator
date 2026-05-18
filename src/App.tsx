@@ -30,7 +30,7 @@ const primaryLight = '#f3eff8';
 const finalBg = '#e9e2f4';
 const borderColor = '#e5e5e5';
 const appVersion = '2026-05-18-quote-title';
-const savedQuoteKey = 'blingkkami-quote-generator-state-v5';
+const savedQuoteKey = 'blingkkami-quote-generator-state-v6';
 
 const defaultFormData: QuoteForm = {
   quoteDate: '',
@@ -79,6 +79,22 @@ const exampleItem: QuoteItem = {
   description: '제공된 기획안 기반 상세페이지 디자인 레이아웃 및 텍스트 배치',
   price: 150000,
 };
+
+const exampleItems: QuoteItem[] = [
+  exampleItem,
+  {
+    id: 'example-option-1',
+    category: '옵션 1',
+    description: 'AI 맞춤형 비주얼 이미지 생성 및 합성 디렉팅 (메인 히어로 컷 포함)',
+    price: 100000,
+  },
+  {
+    id: 'example-option-2',
+    category: '옵션 2',
+    description: '마케팅 소구점 발굴 및 카피라이팅, 전반적인 기획 단계 추가',
+    price: 100000,
+  },
+];
 
 const formatCurrency = (amount: number) => `${new Intl.NumberFormat('ko-KR').format(amount || 0)}원`;
 
@@ -181,7 +197,20 @@ export default function App() {
     }
   });
 
-  const subtotal = useMemo(() => items.reduce((sum, item) => sum + Number(item.price || 0), 0), [items]);
+  const isQuoteBlank = useMemo(() => {
+    const hasFormValue = Object.values(formData).some((value) => String(value).trim() !== '');
+    const hasItemValue = items.some(
+      (item) => item.category.trim() !== '' || item.description.trim() !== '' || Number(item.price || 0) > 0,
+    );
+
+    return !hasFormValue && !hasItemValue;
+  }, [formData, items]);
+  const previewFormData = isQuoteBlank ? exampleFormData : formData;
+  const previewItems = isQuoteBlank ? exampleItems : items;
+  const subtotal = useMemo(
+    () => previewItems.reduce((sum, item) => sum + Number(item.price || 0), 0),
+    [previewItems],
+  );
   const total = Math.round(subtotal * 1.1);
 
   useEffect(() => {
@@ -290,7 +319,7 @@ export default function App() {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`견적서_${formData.projectName || '프로젝트'}_${new Date().toISOString().slice(0, 10)}.pdf`);
+      pdf.save(`견적서_${previewFormData.projectName || '프로젝트'}_${new Date().toISOString().slice(0, 10)}.pdf`);
     } finally {
       setIsGenerating(false);
     }
@@ -452,8 +481,8 @@ export default function App() {
               <div className="origin-top-left" style={{ width: 794, transform: `scale(${previewScale})` }}>
                 <QuotePreview
                   ref={previewRef}
-                  formData={formData}
-                  items={items}
+                  formData={previewFormData}
+                  items={previewItems}
                   logoImage={logoImage}
                   subtotal={subtotal}
                   total={total}
