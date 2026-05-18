@@ -30,29 +30,46 @@ const primaryLight = '#f3eff8';
 const finalBg = '#e9e2f4';
 const borderColor = '#e5e5e5';
 const appVersion = '2026-05-18-quote-title';
-const savedQuoteKey = 'blingkkami-quote-generator-state-v2';
+const savedQuoteKey = 'blingkkami-quote-generator-state-v3';
 
 const defaultFormData: QuoteForm = {
-  quoteDate: '',
-  validDuration: '',
-  issuerName: '',
-  projectName: '',
-  deliveryFormat: '',
-  deliverySchedule: '',
-  finalCategory: '',
-  finalDescription: '',
-  notes: '',
-  message: '',
-  signOffSender: '',
-  signOffDate: '',
+  quoteDate: '2026-05-18',
+  validDuration: '견적일로부터 14일',
+  issuerName: '블링까미 스튜디오',
+  projectName: 'PALDO 미인도 목업 및 리플렛 디자인 재구성',
+  deliveryFormat: '인쇄용 파일 (PDF/JPG, 필요 시 AI/PSD)',
+  deliverySchedule: '착수 후 14영업일',
+  finalCategory: '총 작업 구성',
+  finalDescription: '제품 목업 3종 + 스튜디오컷 3컷 + 리플렛 레이아웃 재구성',
+  notes:
+    '이미지 및 리플렛 레이아웃 수정은 항목별 2회까지 포함됩니다. 그 이후 추가 수정이 필요하신 경우, 난이도에 따라 회당 20,000원부터 추가 비용이 발생할 수 있습니다.\n제품 설명 및 카피 문구는 클라이언트 제공 원고를 기준으로 적용하며, 별도의 카피라이팅 작업은 포함되지 않습니다.\n최종 납품 파일은 웹/인쇄용 JPG, PNG, PDF로 제공하며, 필요 시 작업용 AI/PSD 원본 파일을 함께 전달드립니다.\n작업 착수 전 계약금 50% 선입금을 원칙으로 합니다. 입금 계좌 및 세금계산서 또는 현금영수증 발행 관련 안내는 계약 확정 후 함께 전달드리겠습니다.\n본 견적서의 유효기간은 견적일로부터 14일입니다.',
+  message:
+    '지난 BT THERA 패키지 및 진열대 디자인에 이어 다시 작업을 맡겨 주셔서 감사합니다.\n이번 PALDO 미인도 프로젝트는 제품 목업과 스튜디오컷, 리플렛의 주요 페이지를 전반적으로 정리하는 작업으로, 실제 작업 범위를 반영해 아래와 같이 견적드립니다.\n앞으로도 패키지나 다른 디자인 작업 필요하실 때 언제든 편하게 연락 주세요. 좋은 파트너가 되겠습니다.',
+  signOffSender: '블링까미 스튜디오 드림',
+  signOffDate: '2026년 5월 18일',
 };
 
 const defaultItems: QuoteItem[] = [
   {
     id: 'base',
-    category: '',
-    description: '',
-    price: 0,
+    category: 'A. 제품 목업 제작',
+    description:
+      '미인도 튜브 크림 2종 및 미스트 1종 목업 이미지 제작. 기존 디자인 톤앤매너에 맞춰 합성, 보정, 라벨 정리 및 AI 렌더링 후보정 작업을 진행합니다.',
+    price: 250000,
+  },
+  {
+    id: 'studio',
+    category: 'B. 스튜디오컷 제작',
+    description:
+      '제품 3종 각각에 대한 스튜디오 연출 이미지 1컷씩 총 3컷 제작. AI 기반 이미지 생성 후 색감, 그림자, 구도 보정을 통해 실제 촬영컷과 유사한 톤으로 완성합니다.',
+    price: 200000,
+  },
+  {
+    id: 'leaflet',
+    category: 'C. 리플렛 레이아웃 편집',
+    description:
+      '기존 제품컷을 신규 목업 및 스튜디오컷으로 교체하고, 제품 순서, 텍스트 블록, 여백, 정렬을 포함한 리플렛 레이아웃을 재구성합니다.',
+    price: 150000,
   },
 ];
 
@@ -281,25 +298,15 @@ export default function App() {
             <h1 className="text-lg font-bold">견적서 생성기</h1>
             <span className="sr-only">version {appVersion}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <a
-              href="./quote-example.pdf"
-              download="견적서_BT_예시.pdf"
-              className="inline-flex items-center gap-2 rounded-md border border-[#3b2f7d] bg-white px-4 py-2 text-sm font-semibold text-[#3b2f7d] transition hover:bg-[#f3eff8]"
-            >
-              <Download className="h-4 w-4" />
-              예시 PDF
-            </a>
-            <button
-              type="button"
-              onClick={downloadPdf}
-              disabled={isGenerating}
-              className="inline-flex items-center gap-2 rounded-md bg-[#3b2f7d] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#302666] disabled:bg-[#a67dbf]"
-            >
-              <Download className="h-4 w-4" />
-              {isGenerating ? 'PDF 생성 중' : 'PDF 다운로드'}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={downloadPdf}
+            disabled={isGenerating}
+            className="inline-flex items-center gap-2 rounded-md bg-[#3b2f7d] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#302666] disabled:bg-[#a67dbf]"
+          >
+            <Download className="h-4 w-4" />
+            {isGenerating ? 'PDF 생성 중' : 'PDF 다운로드'}
+          </button>
         </div>
       </header>
 
