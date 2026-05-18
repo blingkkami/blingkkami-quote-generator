@@ -33,39 +33,26 @@ const appVersion = '2026-05-18-quote-title';
 const savedQuoteKey = 'blingkkami-quote-generator-state-v2';
 
 const defaultFormData: QuoteForm = {
-  quoteDate: '2026-05-07',
-  validDuration: '견적일로부터 14일',
-  issuerName: '블링까미 스튜디오',
-  projectName: 'BT THERA 에코패키지 디자인',
-  deliveryFormat: 'AI 파일 (인쇄용)',
-  deliverySchedule: '착수 후 10영업일 (5월 20일)',
-  finalCategory: '최종 풀구성',
-  finalDescription: '하짝 + 상짝 컬러변형 1종 + 신규 2종 + AI 파일 납품',
-  notes:
-    '기본안만 진행하실 경우 80,000원이며, 옵션은 필요한 항목만 선택 가능합니다.\n수정은 항목별 2회까지 포함됩니다. 그 이후 추가 수정이 필요하신 경우, 난이도에 따라 회당 20,000원부터 추가 비용이 발생할 수 있습니다.\n최종 납품 파일은 인쇄용 AI 파일로 제공됩니다.\n작업 착수 전 계약금 50% 선입금을 원칙으로 합니다. 입금 계좌 및 세금계산서(또는 현금영수증) 발행 관련 안내는 계약 확정 후 함께 전달드리겠습니다.\n본 견적서의 유효기간은 견적일로부터 14일입니다.',
-  message: '앞으로도 패키지나 다른 디자인 작업 필요하실 때 언제든 편하게 연락 주세요. 좋은 파트너가 되겠습니다.',
-  signOffSender: '블링까미 스튜디오 드림',
-  signOffDate: '2026년 5월 7일',
+  quoteDate: '',
+  validDuration: '',
+  issuerName: '',
+  projectName: '',
+  deliveryFormat: '',
+  deliverySchedule: '',
+  finalCategory: '',
+  finalDescription: '',
+  notes: '',
+  message: '',
+  signOffSender: '',
+  signOffDate: '',
 };
 
 const defaultItems: QuoteItem[] = [
   {
     id: 'base',
-    category: '기본안',
-    description: '하짝 3세트 적용, 제공 문구 배치, 로고/기본 표기 정리',
-    price: 80000,
-  },
-  {
-    id: 'option-1',
-    category: '옵션 1',
-    description: '상짝 컬러변형 1종 추가',
-    price: 50000,
-  },
-  {
-    id: 'option-2',
-    category: '옵션 2',
-    description: '상짝 신규 디자인 2종 전체 추가',
-    price: 140000,
+    category: '',
+    description: '',
+    price: 0,
   },
 ];
 
@@ -308,6 +295,15 @@ export default function App() {
 
       <main className="mx-auto grid max-w-7xl gap-8 px-4 py-8 xl:grid-cols-[minmax(360px,520px)_1fr] sm:px-6 lg:px-8">
         <section className="space-y-5">
+          <Panel title="사용 방법">
+            <ol className="list-decimal space-y-1 pl-5 text-sm leading-6 text-slate-600">
+              <li>로고가 필요하면 먼저 업로드하세요.</li>
+              <li>기본 정보와 작업 항목을 입력하면 오른쪽 견적서가 바로 갱신됩니다.</li>
+              <li>전달 말씀과 유의사항은 필요한 문구만 자유롭게 작성하세요.</li>
+              <li>작성 후 일반 브라우저에서 PDF 다운로드를 누르면 저장됩니다.</li>
+            </ol>
+          </Panel>
+
           <Panel title="로고">
             <div className="flex items-center gap-4">
               <label className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-semibold hover:bg-slate-100">
