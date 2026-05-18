@@ -32,6 +32,13 @@ const borderColor = '#e5e5e5';
 
 const formatCurrency = (amount: number) => `${new Intl.NumberFormat('ko-KR').format(amount || 0)}원`;
 
+const formatKoreanDate = (value: string) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+
+  const [year, month, day] = value.split('-').map(Number);
+  return `${year}년 ${month}월 ${day}일`;
+};
+
 const trimBottomWhitespace = (dataUrl: string): Promise<{ dataUrl: string; width: number; height: number }> =>
   new Promise((resolve, reject) => {
     const image = new Image();
@@ -104,12 +111,12 @@ export default function App() {
   const [previewHeight, setPreviewHeight] = useState(1123);
   const [logoImage, setLogoImage] = useState<string | null>(null);
   const [formData, setFormData] = useState<QuoteForm>({
-    quoteDate: '2026년 5월 7일',
+    quoteDate: '2026-05-07',
     validDuration: '견적일로부터 14일',
     issuerName: '블링까미 스튜디오',
     projectName: 'BT THERA 에코패키지 디자인',
     deliveryFormat: 'AI 파일 (인쇄용)',
-    deliverySchedule: '착수 후 10영업일 (5월 20일)',
+    deliverySchedule: '2026-05-20',
     finalCategory: '최종 풀구성',
     finalDescription: '하짝 + 상짝 컬러변형 1종 + 신규 2종 + AI 파일 납품',
     notes:
@@ -302,12 +309,18 @@ export default function App() {
 
           <Panel title="기본 정보">
             <div className="grid gap-4 sm:grid-cols-2">
-              <TextInput label="견적일" name="quoteDate" value={formData.quoteDate} onChange={updateForm} />
+              <TextInput label="견적일" name="quoteDate" type="date" value={formData.quoteDate} onChange={updateForm} />
               <TextInput label="유효기간" name="validDuration" value={formData.validDuration} onChange={updateForm} />
               <TextInput label="공급자" name="issuerName" value={formData.issuerName} onChange={updateForm} />
               <TextInput label="프로젝트명" name="projectName" value={formData.projectName} onChange={updateForm} />
               <TextInput label="납품 형식" name="deliveryFormat" value={formData.deliveryFormat} onChange={updateForm} />
-              <TextInput label="납기 예정" name="deliverySchedule" value={formData.deliverySchedule} onChange={updateForm} />
+              <TextInput
+                label="납기 예정일"
+                name="deliverySchedule"
+                type="date"
+                value={formData.deliverySchedule}
+                onChange={updateForm}
+              />
             </div>
           </Panel>
 
@@ -441,7 +454,7 @@ const QuotePreview = React.forwardRef<
         <tbody>
           <InfoRow
             leftLabel="견적일"
-            leftValue={formData.quoteDate}
+            leftValue={formatKoreanDate(formData.quoteDate)}
             rightLabel="유효기간"
             rightValue={formData.validDuration}
           />
@@ -454,8 +467,8 @@ const QuotePreview = React.forwardRef<
           <InfoRow
             leftLabel="납품 형식"
             leftValue={formData.deliveryFormat}
-            rightLabel="납기 예정"
-            rightValue={formData.deliverySchedule}
+            rightLabel="납기 예정일"
+            rightValue={formatKoreanDate(formData.deliverySchedule)}
             isLast
           />
         </tbody>
@@ -557,17 +570,19 @@ function TextInput({
   name,
   value,
   onChange,
+  type = 'text',
 }: {
   label: string;
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
 }) {
   return (
     <label className="block">
       <span className="mb-1 block text-sm font-medium text-slate-700">{label}</span>
       <input
-        type="text"
+        type={type}
         name={name}
         value={value}
         onChange={onChange}
