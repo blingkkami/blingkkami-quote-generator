@@ -30,9 +30,24 @@ const primaryLight = '#f3eff8';
 const finalBg = '#e9e2f4';
 const borderColor = '#e5e5e5';
 const appVersion = '2026-05-18-quote-title';
-const savedQuoteKey = 'blingkkami-quote-generator-state-v4';
+const savedQuoteKey = 'blingkkami-quote-generator-state-v5';
 
 const defaultFormData: QuoteForm = {
+  quoteDate: '',
+  validDuration: '',
+  issuerName: '',
+  projectName: '',
+  deliveryFormat: '',
+  deliverySchedule: '',
+  finalCategory: '',
+  finalDescription: '',
+  notes: '',
+  message: '',
+  signOffSender: '',
+  signOffDate: '',
+};
+
+const exampleFormData: QuoteForm = {
   quoteDate: '2026-05-18',
   validDuration: '견적일로부터 14일 (2026년 6월 1일 총 유효)',
   issuerName: '블링까미 스튜디오',
@@ -42,9 +57,9 @@ const defaultFormData: QuoteForm = {
   finalCategory: '최종 풀구성',
   finalDescription: '기획 + AI 비주얼 디렉팅 + 상세페이지 디자인 전체 + 원본 PSD 제공',
   notes:
-    '선택 진행 안내: 기본안만 진행하실 경우 150,000원이며, 옵션은 필요한 항목만 골라 선택이 가능합니다.\n수정 횟수: 무상 수정은 항목별 기본 2회까지 포함됩니다. 이후 추가 수정이 필요할 경우 난이도에 따라 회당 20,000원부터 추가 비용이 발생할 수 있습니다.\n최종 납품: 최종 확정된 파일은 웹 업로드용 고화질 이미지와 수정 가능한 원본 파일로 제공됩니다.\n결제 조건: 작업 착수 전 계약금 50% 선입금을 원칙으로 합니다. 잔금은 최종 시안 컨펌 후 납품 전에 정산됩니다. 입금 계좌 및 증빙 서류(세금계산서 등) 안내는 계약 확정 후 전달드립니다.',
+    '선택 진행 안내: 기본안만 진행하실 경우 150,000원이며, 옵션은 필요한 항목만 골라 선택이 가능합니다.\n수정 횟수: 무상 수정은 항목별 기본 2회까지 포함됩니다.\n최종 납품: 최종 확정된 파일은 웹 업로드용 고화질 이미지와 수정 가능한 원본 파일로 제공됩니다.',
   message:
-    '안녕하세요, 대표님. 보내주신 제품 컨셉과 레퍼런스를 꼼꼼히 검토한 후 제안드리는 견적서입니다.\n이번 프로젝트가 브랜드의 매력을 극대화할 수 있는 중요한 시작점인 만큼, 위 기준 금액을 바탕으로 조율이 필요하시거나 내부 예산안이 따로 있으시다면 편하게 말씀해 주세요. 첫 거래인 만큼 만족스러운 결과물을 위해 최대한 유연하게 맞춰 가고자 합니다.\n트렌디하고 완성도 높은 상세페이지로 좋은 시너지를 내는 파트너가 되겠습니다. 감사합니다.',
+    '안녕하세요, 대표님. 보내주신 제품 컨셉과 레퍼런스를 꼼꼼히 검토한 후 제안드리는 견적서입니다.\n조율이 필요하시거나 내부 예산안이 따로 있으시다면 편하게 말씀해 주세요.',
   signOffSender: '블링까미 스튜디오 드림',
   signOffDate: '2026년 5월 18일',
 };
@@ -52,26 +67,18 @@ const defaultFormData: QuoteForm = {
 const defaultItems: QuoteItem[] = [
   {
     id: 'base',
-    category: '기본안',
-    description:
-      '제공된 기획안 기반 상세페이지 디자인 레이아웃 및 텍스트 배치 (기본형)',
-    price: 150000,
-  },
-  {
-    id: 'option-1',
-    category: '옵션 1',
-    description:
-      'AI 맞춤형 비주얼 이미지 생성 및 합성 디렉팅 (메인 히어로 컷 포함)',
-    price: 100000,
-  },
-  {
-    id: 'option-2',
-    category: '옵션 2',
-    description:
-      '마케팅 소구점 발굴 및 카피라이팅, 전반적인 기획 단계 추가',
-    price: 100000,
+    category: '',
+    description: '',
+    price: 0,
   },
 ];
+
+const exampleItem: QuoteItem = {
+  id: 'example',
+  category: '기본안',
+  description: '제공된 기획안 기반 상세페이지 디자인 레이아웃 및 텍스트 배치',
+  price: 150000,
+};
 
 const formatCurrency = (amount: number) => `${new Intl.NumberFormat('ko-KR').format(amount || 0)}원`;
 
@@ -374,21 +381,22 @@ export default function App() {
                       value={item.category}
                       onChange={(event) => updateItem(item.id, 'category', event.target.value)}
                       className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-                      placeholder="항목"
+                      placeholder={exampleItem.category}
                     />
                     <input
                       aria-label="내용"
                       value={item.description}
                       onChange={(event) => updateItem(item.id, 'description', event.target.value)}
                       className="rounded-md border border-slate-300 px-3 py-2 text-sm"
-                      placeholder="내용"
+                      placeholder={exampleItem.description}
                     />
                     <input
                       aria-label="금액"
                       type="number"
-                      value={item.price}
+                      value={item.price || ''}
                       onChange={(event) => updateItem(item.id, 'price', event.target.value)}
                       className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+                      placeholder={String(exampleItem.price)}
                     />
                     <button
                       type="button"
@@ -626,6 +634,7 @@ function TextInput({
         name={name}
         value={value}
         onChange={onChange}
+        placeholder={exampleFormData[name as keyof QuoteForm]}
         className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-[#3b2f7d] focus:ring-2 focus:ring-[#f3eff8]"
       />
     </label>
@@ -653,6 +662,7 @@ function TextArea({
         rows={rows}
         value={value}
         onChange={onChange}
+        placeholder={exampleFormData[name as keyof QuoteForm]}
         className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-[#3b2f7d] focus:ring-2 focus:ring-[#f3eff8]"
       />
     </label>
