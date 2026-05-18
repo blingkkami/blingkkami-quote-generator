@@ -30,6 +30,45 @@ const primaryLight = '#f3eff8';
 const finalBg = '#e9e2f4';
 const borderColor = '#e5e5e5';
 const appVersion = '2026-05-18-quote-title';
+const savedQuoteKey = 'blingkkami-quote-generator-state';
+
+const defaultFormData: QuoteForm = {
+  quoteDate: '2026-05-07',
+  validDuration: '견적일로부터 14일',
+  issuerName: '블링까미 스튜디오',
+  projectName: 'BT THERA 에코패키지 디자인',
+  deliveryFormat: 'AI 파일 (인쇄용)',
+  deliverySchedule: '착수 후 10영업일 (5월 20일)',
+  finalCategory: '최종 풀구성',
+  finalDescription: '하짝 + 상짝 컬러변형 1종 + 신규 2종 + AI 파일 납품',
+  notes:
+    '기본안만 진행하실 경우 80,000원이며, 옵션은 필요한 항목만 선택 가능합니다.\n수정은 항목별 2회까지 포함됩니다. 그 이후 추가 수정이 필요하신 경우, 난이도에 따라 회당 20,000원부터 추가 비용이 발생할 수 있습니다.\n최종 납품 파일은 인쇄용 AI 파일로 제공됩니다.\n작업 착수 전 계약금 50% 선입금을 원칙으로 합니다. 입금 계좌 및 세금계산서(또는 현금영수증) 발행 관련 안내는 계약 확정 후 함께 전달드리겠습니다.\n본 견적서의 유효기간은 견적일로부터 14일입니다.',
+  message:
+    '이윤서 대표님 소개로 인연이 닿아 정말 반갑습니다.\n위 금액이 기준이지만, 혹시 내부 예산이 정해져 있으시면 편하게 말씀 주세요. 첫 거래인 만큼 최대한 맞춰 드리려고 합니다.\n앞으로도 패키지나 다른 디자인 작업 필요하실 때 언제든 편하게 연락 주세요. 좋은 파트너가 되겠습니다.',
+  signOffSender: '블링까미 스튜디오 드림',
+  signOffDate: '2026년 5월 7일',
+};
+
+const defaultItems: QuoteItem[] = [
+  {
+    id: 'base',
+    category: '기본안',
+    description: '하짝 3세트 적용, 제공 문구 배치, 로고/기본 표기 정리',
+    price: 80000,
+  },
+  {
+    id: 'option-1',
+    category: '옵션 1',
+    description: '상짝 컬러변형 1종 추가',
+    price: 50000,
+  },
+  {
+    id: 'option-2',
+    category: '옵션 2',
+    description: '상짝 신규 디자인 2종 전체 추가',
+    price: 140000,
+  },
+];
 
 const formatCurrency = (amount: number) => `${new Intl.NumberFormat('ko-KR').format(amount || 0)}원`;
 
@@ -111,45 +150,33 @@ export default function App() {
   const [previewScale, setPreviewScale] = useState(1);
   const [previewHeight, setPreviewHeight] = useState(1123);
   const [logoImage, setLogoImage] = useState<string | null>(null);
-  const [formData, setFormData] = useState<QuoteForm>({
-    quoteDate: '2026-05-07',
-    validDuration: '견적일로부터 14일',
-    issuerName: '블링까미 스튜디오',
-    projectName: 'BT THERA 에코패키지 디자인',
-    deliveryFormat: 'AI 파일 (인쇄용)',
-    deliverySchedule: '착수 후 10영업일 (5월 20일)',
-    finalCategory: '최종 풀구성',
-    finalDescription: '하짝 + 상짝 컬러변형 1종 + 신규 2종 + AI 파일 납품',
-    notes:
-      '기본안만 진행하실 경우 80,000원이며, 옵션은 필요한 항목만 선택 가능합니다.\n수정은 항목별 2회까지 포함됩니다. 그 이후 추가 수정이 필요하신 경우, 난이도에 따라 회당 20,000원부터 추가 비용이 발생할 수 있습니다.\n최종 납품 파일은 인쇄용 AI 파일로 제공됩니다.\n작업 착수 전 계약금 50% 선입금을 원칙으로 합니다. 입금 계좌 및 세금계산서(또는 현금영수증) 발행 관련 안내는 계약 확정 후 함께 전달드리겠습니다.\n본 견적서의 유효기간은 견적일로부터 14일입니다.',
-    message:
-      '이윤서 대표님 소개로 인연이 닿아 정말 반갑습니다.\n위 금액이 기준이지만, 혹시 내부 예산이 정해져 있으시면 편하게 말씀 주세요. 첫 거래인 만큼 최대한 맞춰 드리려고 합니다.\n앞으로도 패키지나 다른 디자인 작업 필요하실 때 언제든 편하게 연락 주세요. 좋은 파트너가 되겠습니다.',
-    signOffSender: '블링까미 스튜디오 드림',
-    signOffDate: '2026년 5월 7일',
+  const [formData, setFormData] = useState<QuoteForm>(() => {
+    const saved = localStorage.getItem(savedQuoteKey);
+    if (!saved) return defaultFormData;
+
+    try {
+      return { ...defaultFormData, ...JSON.parse(saved).formData };
+    } catch {
+      return defaultFormData;
+    }
   });
-  const [items, setItems] = useState<QuoteItem[]>([
-    {
-      id: 'base',
-      category: '기본안',
-      description: '하짝 3세트 적용, 제공 문구 배치, 로고/기본 표기 정리',
-      price: 80000,
-    },
-    {
-      id: 'option-1',
-      category: '옵션 1',
-      description: '상짝 컬러변형 1종 추가',
-      price: 50000,
-    },
-    {
-      id: 'option-2',
-      category: '옵션 2',
-      description: '상짝 신규 디자인 2종 전체 추가',
-      price: 140000,
-    },
-  ]);
+  const [items, setItems] = useState<QuoteItem[]>(() => {
+    const saved = localStorage.getItem(savedQuoteKey);
+    if (!saved) return defaultItems;
+
+    try {
+      return JSON.parse(saved).items || defaultItems;
+    } catch {
+      return defaultItems;
+    }
+  });
 
   const subtotal = useMemo(() => items.reduce((sum, item) => sum + Number(item.price || 0), 0), [items]);
   const total = Math.round(subtotal * 1.1);
+
+  useEffect(() => {
+    localStorage.setItem(savedQuoteKey, JSON.stringify({ formData, items }));
+  }, [formData, items]);
 
   useEffect(() => {
     const container = previewContainerRef.current;
